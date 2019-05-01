@@ -3,13 +3,217 @@
 
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/styles/styles.css" media="screen" title="no title" charset="utf-8">
-  <title>Home Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Homepage</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <!-- Charts CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="/styles/styles.css">
+
+  <!-- JQuery & Moment JS -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src="/js/index.js"></script>
+  {{!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> --}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <!-- Charts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
 </head>
 
 <body>
-  {{{body}}}
+  <div class="jumbotron jumbotron-billboard">
+    <div class="img"></div>
+    <div class="container">
+      <img src="/images/logo_transparent.png" class="logo" alt="challenge accepted">
+      <p> A self-improvement, motivational and social app intended to keep you on track to reach your goals.<br>
+        Train your mind, body and spirit by accepting our daily challenges including; a physical exercise, dose of
+        inspiration, and a journal reflection. Track and record your progress by providing the following information: RBPM, BMI, Zone & Blog.
+        <hr>
+        Only AFTER you complete the 30 days you'll be able to see your results and progress. <br> Will you accept?</p> <br>
+      <a id="loadChallenge" class="btn btn-danger btn-lg"onclick="move()">Challenge Accepted!</a>
+      <br><br><a type="button" class="btn btn-ligh btn-lg" href="/"><i class="fas fa-igloo"></i></a>
+    </div>
+  </div>
+  <div class="row" id="challengeZone">
+    <div class="col-sm-3">
+      <div class="card">
+        <h5 class="card-header text-center">Mind</h5>
+        <div class="card-body">
+          <div id="inspirationText" class="card-text"></div>
+          <div id="inspirationAuthor" class="card-text"></div>
+          <img src="https://source.unsplash.com/random?nature" class="card-img-top" alt="inspirational image to change your life">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card text-center">
+        <h5 class="card-header text-center">Body</h5>
+        <div id="cardBody">
+          {{{body}}}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card">
+        <h5 class="card-header text-center">Spirit</h5>
+        <div class="card-body">
+          <div id="myProgress" class="w3-light-grey">
+            <div id="myBar" class="w3-container w3-purple"></div>
+          </div> <br>
+          <p>Your progress to completion <i class="fas fa-running"></i></p>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
+
+<script>
+
+  $(document).ready(function () {
+
+    // When Challenge Accepted button is clicked, enter a record into the spirittrackers
+    // table to indicate that the challenge has begun.
+    $("#loadChallenge").click(function () {
+
+      let postObj = {
+        start_date: Date(),
+        checkin_counter: 0
+      };
+
+      //console.log(postObj);
+
+      $.post("/api/accept_challenge", postObj, function (result) {
+        // Reload the landing page.
+        window.location = "/";
+      });
+    });
+
+    // Determine whether challenge was accepted and if so, how many days of checkin
+    // are completed.
+    $.get("/api/accepted", function (data) {
+      console.log("/api/accepted");
+      console.log(data);
+
+      if (data.started) {
+
+        let checkin_counter = data.data[0].checkin_counter;
+
+        // Disable the Challenge Accepted button.
+        console.log("Disable the loadChallenge button.");
+        $("#loadChallenge").hide();
+
+        // Determine whether the buttons on the index card exist at this point.
+        // Hide or show them according to the value on the checkin_counter
+        // Show the fitness call button only if fewer than 30 checkins have
+        // been performed.
+        if ($("#fitnessCall").length > 0) {
+          if (checkin_counter < 30) {
+            $("#fitnessCall").show();
+          }
+          else {
+            $("#fitnessCall").hide();
+          }
+        }
+
+        // Show the checkin call button only if fewer than 30 checkins have
+        // been performed.
+        if ($("#checkinCall").length > 0) {
+          if (checkin_counter < 30) {
+            $("#checkinCall").show();
+          }
+          else {
+            $("#checkinCall").hide();
+          }
+        }
+
+        // Show the chartsCall button only if 30 checkins have been performed.
+        // i.e at the end of the challenge.
+        if ($("#chartsCall").length > 0) {
+          if (checkin_counter < 30) {
+            $("#chartsCall").hide();
+          }
+          else {
+            $("#chartsCall").show();
+          }
+        }
+
+        console.log("Display the three button page and disable the Challenge Accepted button.");
+        $("#cardBody").show();
+
+        // TODO : UPDATE THE SPIRIT TRACKER HERE
+        console.log("Update the spirit tracker");
+        console.log(checkin_counter);
+        move(checkin_counter);
+      }
+      else {
+        $("#cardBody").hide();
+      }
+    });
+
+    // Generate a random day.
+    let rand_day = Math.floor(Math.random() * 30) + 1;
+    let query = "/api/inspiration/" + rand_day;
+    console.log("Query : " + query);
+
+    // Get the inspiration data.
+    $.get(query, function (data) {
+
+      console.log("RECEIVED FROM POST : " + JSON.stringify(data));
+      console.log(data);
+
+      $("#inspirationText").html("<p>" + data.quote + "</p>");
+      $("#inspirationAuthor").html("<p>" + " ~ " + data.author + "</p>");
+
+    });
+  });
+
+  //progress spirit bar move function
+  function move(checkin_counter) {
+    var elem = document.getElementById("myBar");
+    var width = 0;
+    var id = setInterval(frame, 50);
+    var increment_val = 100 / 30;
+    var progress = increment_val * checkin_counter;
+
+    if (width == 0) {
+      elem.style.width = width + '%';
+      elem.innerHTML = (width * 1).toFixed(0) + '%';
+    }
+
+    function frame() {
+      if (width >= progress) {
+        clearInterval(id);
+      } else {
+        width = width + increment_val;
+        if (width > 100) {
+          width = 100;
+        }
+        elem.style.width = width + '%';
+        elem.innerHTML = (width * 1).toFixed(0) + '%';
+      }
+    }
+  }
+</script>
 
 </html>
